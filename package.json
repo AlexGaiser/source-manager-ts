@@ -6,7 +6,9 @@
   "scripts": {
     "test": "jest",
     "watch": "tsc --watch",
-    "start:dev": "tsc && node dist/cli.js"
+    "start:dev": "npm run build && node dist/cli.js",
+    "build": "./node_modules/typescript/bin/tsc",
+    "publish:local": "npm run build && npm link"
   },
   "repository": {
     "type": "git",
