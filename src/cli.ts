@@ -1,5 +1,4 @@
-#!/usr/local/bin/node
-
+#! /usr/bin/env node
 import { getRootDir } from "./services/filemanager.service";
 import { Markdown } from "./services/Markdown";
 import readline from 'readline';
