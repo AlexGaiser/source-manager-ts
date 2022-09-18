@@ -1,6 +1,5 @@
 #!/bin/bash
 clean_flag='false'
-echo $clean_flag
 
 while getopts 'c' flag; do
   case "${flag}" in
@@ -8,7 +7,6 @@ while getopts 'c' flag; do
   esac
 done
 
-echo $clean_flag
 if [ $clean_flag == 'true' ]; then
    rm -rf ./dist/
 fi
