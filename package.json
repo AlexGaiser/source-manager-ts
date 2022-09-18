@@ -9,7 +9,7 @@
     "start:dev": "npm run build && node dist/cli.js",
     "build": "./node_modules/typescript/bin/tsc",
     "build:clean": "rm -rf dist/ && npm run build",
-    "prepublishOnly": "./scripts/prebublish.sh",
+    "prepublishOnly": "./scripts/prepublish.sh",
     "publish:local": "npm uninstall -g source-manager-md && npm run build:clean && npm link",
     "publish:npm": "./scripts/push.sh"
   },
