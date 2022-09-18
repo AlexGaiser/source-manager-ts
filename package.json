@@ -8,7 +8,8 @@
     "watch": "tsc --watch",
     "start:dev": "npm run build && node dist/cli.js",
     "build": "./node_modules/typescript/bin/tsc",
-    "publish:local": "npm run build && npm link"
+    "publish:local": "npm run build && npm link",
+    "publish": "./scripts/publish.sh patch"
   },
   "repository": {
     "type": "git",
