@@ -1,6 +1,6 @@
 {
   "name": "source-manager-md",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": "This project was built with Init-Typescript-Project",
   "main": "cli",
   "scripts": {
