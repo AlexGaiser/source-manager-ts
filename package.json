@@ -8,8 +8,8 @@
     "watch": "tsc --watch",
     "start:dev": "npm run build && node dist/cli.js",
     "prebuild": "node -p \"'export const LIB_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/config.ts",
-    "build": "./node_modules/typescript/bin/tsc",
-    "build:clean": "rm -rf dist/ && npm run build",
+    "build": "./scripts/build.sh",
+    "build:clean": "./scripts/build.sh -c",
     "prepublishOnly": "./scripts/prepublish.sh",
     "publish:local": "npm uninstall -g source-manager-md && npm run build:clean && npm link",
     "publish:npm": "./scripts/push.sh"
