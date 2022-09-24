@@ -1,4 +1,4 @@
-import { readFile, writeFile, writeMarkdownfile } from "./filemanager.service";
+import { readFile, writeMarkdownfile } from "./filemanager.service";
 
 export class Markdown {
   filePath:string;
@@ -19,8 +19,12 @@ export class Markdown {
     return `[${description || link}](${link})`
   }
 
+  private makeBulletItem(str:string) {
+    return `- ${str}`
+  }
+
   addLinkToLine(targetLine: number, link:string, description?:string) {
-    const linkString = this.makeLinkString(link, description)
+    const linkString = this.makeBulletItem(this.makeLinkString(link, description))
     this.fileLines.splice(targetLine, 0, linkString)
     return this;
   }
