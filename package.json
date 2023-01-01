@@ -18,6 +18,9 @@
     "type": "git",
     "url": "https://github.com/AlexGaiser/source-manager-ts"
   },
+  "files": [
+    "dist"
+  ],
   "bin": {
     "add-source-link": "dist/cli.js",
     "asl": "dist/cli.js"
