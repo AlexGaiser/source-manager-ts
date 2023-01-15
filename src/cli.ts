@@ -2,7 +2,7 @@
 import { getRootDir } from './services/filemanager.service';
 import readline from 'readline';
 import { findSourceFile } from './services/sources.service';
-import { LIB_VERSION, SUB_HEADING_LEVEL } from './config';
+import { LIB_VERSION, SUB_HEADING_LEVEL } from './version';
 import { argv } from 'process';
 import { jondown } from 'jondown';
 import { isYesAnswer, unformat } from './services/cli.utils';

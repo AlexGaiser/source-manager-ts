@@ -7,7 +7,7 @@
     "test": "jest",
     "watch": "tsc --watch",
     "start:dev": "npm run build && node dist/cli.js",
-    "prebuild": "node -p \"'export const LIB_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/config.ts",
+    "prebuild": "node -p \"'export const LIB_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
     "build": "./scripts/build.sh",
     "build:clean": "./scripts/build.sh -c",
     "prepublishOnly": "./scripts/prepublish.sh",

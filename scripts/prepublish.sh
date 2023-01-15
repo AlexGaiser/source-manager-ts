@@ -5,6 +5,6 @@ npm version $RELEASE
 
 npm run build
 
-git add src/config.ts
+git add src/version.ts
 
 git commit --amend --no-edit
