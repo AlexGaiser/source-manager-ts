@@ -5,6 +5,7 @@ import readline from 'readline';
 import { findSourceFile } from './services/sources.service';
 import { LIB_VERSION } from './config';
 import { argv } from 'process';
+import { jonDown } from 'jondown';
 
 //https://stackoverflow.com/questions/18193953/waiting-for-user-to-enter-input-in-node-js
 function askQuestion(query): Promise<string> {
@@ -35,18 +36,22 @@ async function main() {
     console.log('Could not find Sources.md file');
     process.exit();
   }
-  const md = new Markdown(__rootDir, sourceFileName);
+  const md = jonDown(`${__rootDir}/${sourceFileName}`);
 
   console.log('The available link categories are:');
 
-  for (let header of md.subHeaders) {
+  for (let header of md.getHeadingsByLevel(2)) {
     console.log(header);
   }
 
   const linkSubHeading = await askQuestion('link subheading?');
   const linkHREF = await askQuestion('link href?');
   const linkDescription = await askQuestion('link description?');
-  md.addLink(linkSubHeading, linkHREF, linkDescription);
+
+  md.insertUnderHeading(
+    linkSubHeading,
+    md.actions.createLink(linkHREF, linkDescription),
+  );
   md.saveFile();
 }
 
