@@ -1,11 +1,11 @@
 #! /usr/bin/env node
 import { getRootDir } from './services/filemanager.service';
-import { Markdown } from './services/Markdown';
 import readline from 'readline';
 import { findSourceFile } from './services/sources.service';
-import { LIB_VERSION } from './config';
+import { LIB_VERSION, SUB_HEADING_LEVEL } from './config';
 import { argv } from 'process';
-import { jonDown } from 'jondown';
+import { jondown } from 'jondown';
+import { isYesAnswer, unformat } from './services/cli.utils';
 
 //https://stackoverflow.com/questions/18193953/waiting-for-user-to-enter-input-in-node-js
 function askQuestion(query): Promise<string> {
@@ -22,12 +22,18 @@ function askQuestion(query): Promise<string> {
   );
 }
 
+function exit(msg?: string) {
+  if (msg) {
+    console.log(msg);
+  }
+  process.exit();
+}
+
 async function main() {
   const args = argv.slice(2);
 
   if (args[0] === '-v' || args[0] === '--version') {
-    console.log(`v${LIB_VERSION}`);
-    process.exit();
+    exit(`v${LIB_VERSION}`);
   }
 
   const __rootDir = await getRootDir();
@@ -36,23 +42,47 @@ async function main() {
     console.log('Could not find Sources.md file');
     process.exit();
   }
-  const md = jonDown(`${__rootDir}/${sourceFileName}`);
+  const md = jondown(`${__rootDir}/${sourceFileName}`);
 
   console.log('The available link categories are:');
 
-  for (let header of md.getHeadingsByLevel(2)) {
-    console.log(header);
+  const headings = md.getHeadingsByLevel(SUB_HEADING_LEVEL);
+
+  headings.forEach(({ value }) => console.log(value));
+
+  const linkSubAns = await askQuestion('link subheading?');
+
+  const linkSubHeading = headings.find(({ value }) =>
+    unformat(value).startsWith(unformat(linkSubAns)),
+  )?.value;
+
+  console.log(linkSubHeading);
+
+  if (!linkSubHeading) {
+    const shouldCreate = await askQuestion(
+      `Subheading: ${linkSubAns} could not be found, create it?`,
+    );
+    if (isYesAnswer(shouldCreate)) {
+      md.insertHeading(linkSubHeading, SUB_HEADING_LEVEL);
+      console.log(`Subheading ${linkSubAns} created`);
+    } else {
+      exit(`Subheading: ${linkSubAns} could not be found, exiting`);
+    }
   }
 
-  const linkSubHeading = await askQuestion('link subheading?');
   const linkHREF = await askQuestion('link href?');
   const linkDescription = await askQuestion('link description?');
 
+  const formattedLink = md.actions.createLink(
+    linkHREF,
+    linkDescription,
+  );
   md.insertUnderHeading(
     linkSubHeading,
-    md.actions.createLink(linkHREF, linkDescription),
+    md.actions.createBulletItem(formattedLink),
   );
   md.saveFile();
+  exit(`added ${formattedLink} under subheading ${linkSubHeading}`);
 }
 
 main();
