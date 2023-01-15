@@ -2,10 +2,11 @@
 import { getRootDir } from './services/filemanager.service';
 import readline from 'readline';
 import { findSourceFile } from './services/sources.service';
-import { LIB_VERSION, SUB_HEADING_LEVEL } from './version';
+import { SUB_HEADING_LEVEL } from './constants';
 import { argv } from 'process';
 import { jondown } from 'jondown';
 import { isYesAnswer, unformat } from './services/cli.utils';
+import { LIB_VERSION } from './version';
 
 //https://stackoverflow.com/questions/18193953/waiting-for-user-to-enter-input-in-node-js
 function askQuestion(query): Promise<string> {
