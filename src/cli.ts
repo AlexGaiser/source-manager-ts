@@ -52,24 +52,35 @@ async function main() {
 
   const linkSubAns = await askQuestion('link subheading?');
 
-  const linkSubHeading = headings.find(({ value }) =>
+  let linkSubHeading = headings.find(({ value }) =>
     unformat(value).startsWith(unformat(linkSubAns)),
   )?.value;
 
-  console.log(linkSubHeading);
-
   if (!linkSubHeading) {
     const shouldCreate = await askQuestion(
-      `Subheading: ${linkSubAns} could not be found, create it?`,
+      `Subheading: "${linkSubAns}" could not be found, create it?`,
     );
+
     if (isYesAnswer(shouldCreate)) {
+      const useSubmittedLink = await askQuestion(
+        `Use "${linkSubAns}" as new heading?`,
+      );
+
+      if (!isYesAnswer(useSubmittedLink)) {
+        linkSubHeading = await askQuestion('Enter new heading');
+      } else {
+        linkSubHeading = linkSubAns;
+      }
+
       md.insertHeading(linkSubHeading, SUB_HEADING_LEVEL);
-      console.log(`Subheading ${linkSubAns} created`);
+      console.log(`Subheading "${linkSubHeading}" created`);
     } else {
-      exit(`Subheading: ${linkSubAns} could not be found, exiting`);
+      exit(`Subheading: "${linkSubAns}" could not be found, exiting`);
     }
   }
-
+  console.log(
+    `Link will be appended to subheading: "${linkSubHeading}"`,
+  );
   const linkHREF = await askQuestion('link href?');
   const linkDescription = await askQuestion('link description?');
 
@@ -82,7 +93,7 @@ async function main() {
     md.actions.createBulletItem(formattedLink),
   );
   md.saveFile();
-  exit(`added ${formattedLink} under subheading ${linkSubHeading}`);
+  exit(`added ${formattedLink} under subheading "${linkSubHeading}"`);
 }
 
 main();
