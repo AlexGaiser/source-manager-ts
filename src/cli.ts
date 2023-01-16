@@ -7,6 +7,7 @@ import { argv } from 'process';
 import { jondown } from 'jondown';
 import { isYesAnswer, unformat } from './services/cli.utils';
 import { LIB_VERSION } from './version';
+import { init } from './commands/init';
 
 //https://stackoverflow.com/questions/18193953/waiting-for-user-to-enter-input-in-node-js
 function askQuestion(query): Promise<string> {
@@ -40,8 +41,18 @@ async function main() {
   const __rootDir = await getRootDir();
   const sourceFileName = findSourceFile(__rootDir);
   if (!sourceFileName) {
-    console.log('Could not find Sources.md file');
-    process.exit();
+    if (
+      isYesAnswer(
+        await askQuestion(
+          'Could not a find Sources.md file, create one?',
+        ),
+      )
+    ) {
+      init(__rootDir);
+      exit();
+    } else {
+      exit('Sources.md was not created, exiting program');
+    }
   }
   const md = jondown(`${__rootDir}/${sourceFileName}`);
 
@@ -59,7 +70,7 @@ async function main() {
 
   if (!linkSubHeading) {
     const shouldCreate = await askQuestion(
-      `Subheading: "${linkSubAns}" could not be found, create it?`,
+      `Subheading: "${linkSubAns}" could not be found, create a new heading?`,
     );
 
     if (isYesAnswer(shouldCreate)) {
