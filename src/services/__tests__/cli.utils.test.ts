@@ -7,6 +7,7 @@ describe('Parse String to boolean', () => {
     expect(isYesAnswer('true')).toBe(true);
     expect(isYesAnswer('true    ')).toBe(true);
     expect(isYesAnswer('  y   ')).toBe(true);
+    expect(isYesAnswer('')).toBe(true);
   });
   it('should return false for valid false strings', () => {
     expect(isYesAnswer('f')).toBe(false);
@@ -19,7 +20,6 @@ describe('Parse String to boolean', () => {
     expect(isYesAnswer('test')).toBe(false);
     expect(isYesAnswer('test    ')).toBe(false);
     expect(isYesAnswer('te \n st ')).toBe(false);
-    expect(isYesAnswer('')).toBe(false);
     expect(isYesAnswer("       \n \n '")).toBe(false);
   });
 });
